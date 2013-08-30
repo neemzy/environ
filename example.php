@@ -1,39 +1,43 @@
 <?php
 
-$pdo = null;
+// (replace with composer autoload)
+include('src/Environ/Environ.php');
+include('src/Environ/Environment.php');
 
-$dev = new Environ(
+// Instantiation
+$environ = new Environ\Environ();
+
+// Let's declare a first environment...
+$environ->add(
     'development',
     function () {
-        return preg_match('/localhost/', $_SERVER['REQUEST_URI']);
+        return (preg_match('/localhost/', $_SERVER['REQUEST_URI']) !== false);
     },
     function () {
         $pdo = new PDO('sqlite:development.db');
     }
 );
 
-$prod = new Environ(
+// ...and then another
+$environ->add(
     'production',
     function () {
-        return true;
+        return true; // we want it to be chosen by default if no other environment fits
     },
     function () {
         $pdo = new PDO('mysql:host=MYHOST;dbname=MYDBNAME', 'MYUSER', 'MYPASSWORD');
     }
 );
 
-Environ::init();
+// This browses the environment we just declared and selects the first one which condition returns true
+$environ->init();
 
+// Assuming we're working on localhost, this will print 'development'
+echo($environ->get().'<br />');
 
+// Want to try grown-up stuff ?
+$environ->set('production');
 
-$env = Environ::get(); // returns 'development'
-
-
-
-Environ::set('production');
-
-
-
-if (Environ::is('production')) {
-    // This will be executed
+if ($environ->is('production')) {
+    echo('That\'s the stuff'); // This will be printed out
 }

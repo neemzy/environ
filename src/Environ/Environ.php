@@ -4,57 +4,72 @@ namespace Environ;
 
 class Environ
 {
-    private static $instances = array();
-    private static $current = null;
-
-    private $name;
-    private $condition;
-    private $callback;
+    private $envs;
+    private $current;
 
 
 
-    public function __construct($name, \Closure $condition, \Closure $callback)
+    public function __construct()
     {
-        $this->name = $name;
-        $this->condition = $condition;
-        $this->callback = $callback;
-
-        self::$instances[$name] = $this;
+        $this->envs = array();
+        $this->current = null;
     }
 
 
 
-    public static function init()
+    public function add($name, \Closure $condition, \Closure $callback)
     {
-        foreach (self::$instances as $instance) {
-            if ($instance->condition()) {
-                self::set($instance->name);
-                break;
+        $this->envs[$name] = new Environment($condition, $callback);
+    }
+
+
+
+    public function init()
+    {
+        foreach ($this->envs as $name => $env) {
+            try {
+                if (call_user_func($env->condition)) {
+                    $this->set($name);
+                    break;
+                }
+            } catch (\Exception $e) {
+                return false;
             }
         }
+
+        return true;
     }
 
 
 
-    public static function get()
+    public function get()
     {
-        return self::$current;
+        return $this->current;
     }
 
 
 
-    public static function is($name)
+    public function is($name)
     {
-        return $name == self::$current;
+        return $name == $this->current;
     }
 
     
 
-    public static function set($name)
+    public function set($name)
     {
-        if (isset(self::$instances[$name])) {
-            self::$current = $name;
-            self::$instances[self::$current]->callback();
+        if (! isset($this->envs[$name])) {
+            return false;
         }
+
+        $this->current = $name;
+
+        try {
+            call_user_func($this->envs[$name]->callback);
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        return true;
     }
 }
