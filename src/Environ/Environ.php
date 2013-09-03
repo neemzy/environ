@@ -20,6 +20,7 @@ class Environ
     public function add($name, \Closure $condition, \Closure $callback)
     {
         $this->envs[$name] = new Environment($condition, $callback);
+        return $this;
     }
 
 
