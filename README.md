@@ -22,7 +22,7 @@ When adding an environment, you have to specify :
 $environ->add(
     'dev',
     function () {
-        return (preg_match('/localhost/', $_SERVER['REQUEST_URI']) !== false);
+        return preg_match('/localhost/', $_SERVER['SERVER_NAME']);
     },
     function () {
         $pdo = new PDO('sqlite:dev.db');
