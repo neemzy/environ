@@ -47,7 +47,6 @@ $environ->init();
 ```
 
 This will browse the environments you declared above. The first one which condition closure returns a truthy value is then set up as the current environment, and its callback closure is triggered.
-Notice that it means the 'prod' environment will be chosen whatsoever if none of the environments declared before it sees its condition verified.
 
 ### 4. Profit !
 
