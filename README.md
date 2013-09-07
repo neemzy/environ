@@ -55,11 +55,7 @@ Let's assume you're on localhost.
 ```php
 // This will print 'dev'
 echo($environ->get());
-```
 
-But enough with childish games already, time to see how things would work out live !
-
-```php
 // Triggers the callback as well
 $environ->set('prod');
 
