@@ -19,26 +19,28 @@ When adding an environment, you have to specify :
 - A callback closure
 
 ```php
-$environ->add(
-    'dev',
-    function () {
-        return preg_match('/localhost/', $_SERVER['SERVER_NAME']);
-    },
-    function () {
-        $pdo = new PDO('sqlite:dev.db');
-    }
-);
-
-$environ->add(
-    'prod',
-    function () {
-        return true;
-    },
-    function () {
-        $pdo = new PDO('mysql:host=MYHOST;dbname=MYDBNAME', 'MYUSER', 'MYPASSWORD');
-    }
-);
+$environ
+    ->add(
+        'dev',
+        function () {
+            return preg_match('/localhost/', $_SERVER['SERVER_NAME']);
+        },
+        function () {
+            $pdo = new PDO('sqlite:dev.db');
+        }
+    )
+    ->add(
+        'prod',
+        function () {
+            return true;
+        },
+        function () {
+            $pdo = new PDO('mysql:host=MYHOST;dbname=MYDBNAME', 'MYUSER', 'MYPASSWORD');
+        }
+    );
 ```
+
+You can chain declarations as above.
 
 ### 3. ???
 
