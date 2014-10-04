@@ -16,7 +16,7 @@
 
     "autoload": {
         "psr-4": {
-            "Neemzy\\Twig\\Extension\\": "src/"
+            "Neemzy\\Environ\\": "src/"
         }
     }
 }
