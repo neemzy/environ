@@ -1,6 +1,6 @@
 # ENVIRON
 
-PHP 5.3+ lightweight environment manager/helper
+Lightweight environment manager
 
 ## HOW TO USE IT
 

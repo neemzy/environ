@@ -1,19 +1,22 @@
 {
     "name": "neemzy/environ",
-    "description": "PHP 5.3+ lightweight environment manager/helper",
+    "description": "Lightweight environment manager",
+    "minimum-stability": "dev",
+
     "authors": [
         {
             "name": "neemzy",
             "email": "tom.panier@free.fr"
         }
     ],
-    "minimum-stability": "dev",
+
     "require": {
         "php": ">=5.3.0"
     },
+
     "autoload": {
-        "psr-0": {
-            "Environ": "src/"
+        "psr-4": {
+            "Neemzy\\Twig\\Extension\\": "src/"
         }
     }
 }

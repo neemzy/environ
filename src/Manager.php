@@ -1,8 +1,8 @@
 <?php
 
-namespace Environ;
+namespace Neemzy\Environ;
 
-class Environ
+class Manager
 {
     private $envs;
     private $current;

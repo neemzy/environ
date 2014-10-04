@@ -1,6 +1,6 @@
 <?php
 
-namespace Environ;
+namespace Neemzy\Environ;
 
 class Environment
 {
