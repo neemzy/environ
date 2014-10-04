@@ -4,45 +4,74 @@ namespace Neemzy\Environ;
 
 class Manager
 {
-    private $envs;
-    private $current;
+    /**
+     * @var array Environment collection
+     */
+    protected $environments;
+
+    /**
+     * @var string Current environment's name
+     */
+    protected $current;
 
 
 
+    /**
+     * Constructor
+     *
+     * @return void
+     */
     public function __construct()
     {
-        $this->envs = array();
+        $this->environments = array();
         $this->current = null;
     }
 
 
 
-    public function add($name, \Closure $condition, \Closure $callback)
+    /**
+     * Adds an environment to this instance's collection
+     *
+     * @param string                     $name        Environment name
+     * @param Neemzy\Environ\Environment $environment Environment instance
+     *
+     * @return Neemzy\Environ\Manager Self (for chaining)
+     */
+    public function add($name, Environment $environment)
     {
-        $this->envs[$name] = new Environment($condition, $callback);
+        $this->environments[$name] = $environment;
+
         return $this;
     }
 
 
 
+    /**
+     * Initializes environments
+     *
+     * @return void
+     */
     public function init()
     {
-        foreach ($this->envs as $name => $env) {
-            try {
-                if (call_user_func($env->condition)) {
-                    $this->set($name);
-                    break;
-                }
-            } catch (\Exception $e) {
-                return false;
+        foreach ($this->environments as $name => $environment) {
+            if ($environment->test()) {
+                $this->set($name);
+                break;
             }
         }
 
-        return true;
+        if (null == $this->current) {
+            throw new \Exception('No applicable environment was defined');
+        }
     }
 
 
 
+    /**
+     * Gets current environment's name
+     *
+     * @return string
+     */
     public function get()
     {
         return $this->current;
@@ -50,27 +79,35 @@ class Manager
 
 
 
+    /**
+     * Checks if current environment's name is expected value
+     *
+     * @param string $name Excepted current environment name
+     *
+     * @return bool
+     */
     public function is($name)
     {
         return $name == $this->current;
     }
 
-    
 
+
+    /**
+     * Sets current environment
+     *
+     * @param string $name Environment name
+     *
+     * @throws UndefinedEnvironmentException
+     * @return void
+     */
     public function set($name)
     {
-        if (! isset($this->envs[$name])) {
-            return false;
+        if (!isset($this->environments[$name])) {
+            throw new UndefinedEnvironmentException($name);
         }
 
         $this->current = $name;
-
-        try {
-            call_user_func($this->envs[$name]->callback);
-        } catch (\Exception $e) {
-            return false;
-        }
-
-        return true;
+        $this->environments[$name]->run();
     }
 }
