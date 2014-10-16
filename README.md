@@ -7,7 +7,7 @@ Lightweight environment manager
 ### 1. Instantiate
 
 ```php
-$environ = new Environ\Environ();
+$environ = new Neemzy\Environ();
 ```
 
 ### 2. Add environments
