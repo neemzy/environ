@@ -7,7 +7,7 @@ Lightweight environment manager
 ### 1. Instantiate
 
 ```php
-$environ = new Neemzy\Environ();
+$environ = new Neemzy\Environ\Manager();
 ```
 
 ### 2. Add environments
@@ -22,21 +22,25 @@ When adding an environment, you have to specify :
 $environ
     ->add(
         'dev',
-        function () {
-            return preg_match('/localhost/', $_SERVER['SERVER_NAME']);
-        },
-        function () {
-            $pdo = new PDO('sqlite:dev.db');
-        }
+        new Neemzy\Environ\Environment(
+            function () {
+                return preg_match('/localhost/', $_SERVER['SERVER_NAME']);
+            },
+            function () {
+                $pdo = new PDO('sqlite:dev.db');
+            }
+        )
     )
     ->add(
         'prod',
-        function () {
-            return true;
-        },
-        function () {
-            $pdo = new PDO('mysql:host=MYHOST;dbname=MYDBNAME', 'MYUSER', 'MYPASSWORD');
-        }
+        new Neemzy\Environ\Environment(
+            function () {
+                return true;
+            },
+            function () {
+                $pdo = new PDO('mysql:host=MYHOST;dbname=MYDBNAME', 'MYUSER', 'MYPASSWORD');
+            }
+        )
     );
 ```
 
