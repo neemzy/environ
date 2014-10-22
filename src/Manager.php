@@ -2,6 +2,9 @@
 
 namespace Neemzy\Environ;
 
+use Neemzy\Environ\Exception\UndefinedEnvironmentException;
+use Neemzy\Environ\Exception\NoApplicableEnvironmentException;
+
 class Manager
 {
     /**
@@ -49,6 +52,7 @@ class Manager
     /**
      * Initializes environments
      *
+     * @throws Neemzy\Environ\Exception\NoApplicableEnvironmentException
      * @return void
      */
     public function init()
@@ -61,7 +65,7 @@ class Manager
         }
 
         if (null == $this->current) {
-            throw new \Exception('No applicable environment was defined');
+            throw new NoApplicableEnvironmentException();
         }
     }
 
@@ -98,7 +102,7 @@ class Manager
      *
      * @param string $name Environment name
      *
-     * @throws UndefinedEnvironmentException
+     * @throws Neemzy\Environ\Exception\UndefinedEnvironmentException
      * @return void
      */
     public function set($name)

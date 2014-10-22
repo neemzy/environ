@@ -1,8 +1,8 @@
 <?php
 
-namespace Neemzy\Environ;
+namespace Neemzy\Environ\Exception;
 
-class UndefinedEnvironmentException extends Exception
+class UndefinedEnvironmentException extends \Exception
 {
     /**
      * Constructor
