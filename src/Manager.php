@@ -2,43 +2,29 @@
 
 namespace Neemzy\Environ;
 
+use Neemzy\Environ\Environment;
 use Neemzy\Environ\Exception\UndefinedEnvironmentException;
 use Neemzy\Environ\Exception\NoApplicableEnvironmentException;
 
 class Manager
 {
-    /**
-     * @var \Neemzy\Environ\Environment[] collection
-     */
+    /** @var Environment[] */
     protected $environments = array();
 
-    /**
-     * @var string Current environment's name
-     */
+    /** @var string|null */
     protected $current;
 
-
-
-    /**
-     * Constructor
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->environments = array();
         $this->current = null;
     }
 
-
-
     /**
-     * Adds an environment to this instance's collection
+     * @param string      $name
+     * @param Environment $environment
      *
-     * @param string                     $name        Environment name
-     * @param \Neemzy\Environ\Environment $environment Environment instance
-     *
-     * @return \Neemzy\Environ\Manager Self (for chaining)
+     * @return Manager
      */
     public function add($name, Environment $environment)
     {
@@ -47,13 +33,8 @@ class Manager
         return $this;
     }
 
-
-
     /**
-     * Initializes environments
-     *
-     * @throws \Neemzy\Environ\Exception\NoApplicableEnvironmentException
-     * @return void
+     * @throws NoApplicableEnvironmentException
      */
     public function init()
     {
@@ -64,16 +45,12 @@ class Manager
             }
         }
 
-        if (null == $this->current) {
+        if (null === $this->current) {
             throw new NoApplicableEnvironmentException();
         }
     }
 
-
-
     /**
-     * Gets current environment's name
-     *
      * @return string
      */
     public function get()
@@ -81,12 +58,8 @@ class Manager
         return $this->current;
     }
 
-
-
     /**
-     * Checks if current environment's name is expected value
-     *
-     * @param string $name Excepted current environment name
+     * @param string $name
      *
      * @return bool
      */
@@ -95,19 +68,14 @@ class Manager
         return $name == $this->current;
     }
 
-
-
     /**
-     * Sets current environment
+     * @param string $name
      *
-     * @param string $name Environment name
-     *
-     * @throws \Neemzy\Environ\Exception\UndefinedEnvironmentException
-     * @return void
+     * @throws UndefinedEnvironmentException
      */
     public function set($name)
     {
-        if (!isset($this->environments[$name])) {
+        if (!array_key_exists($name, $this->environments)) {
             throw new UndefinedEnvironmentException($name);
         }
 

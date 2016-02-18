@@ -7,9 +7,7 @@ use Neemzy\Environ\Manager;
 class ManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Checks adding an environment to the manager
-     *
-     * @return \Neemzy\Environ\Manager Manager instance
+     * @return Manager
      */
     public function testAdd()
     {
@@ -27,31 +25,23 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         return $manager;
     }
 
-
-
     /**
-     * Checks setting the current environment by an invalid name
+     * @param Manager
      *
-     * @depends testAdd
-     * @param \Neemzy\Environ\Manager Manager instance
-     *
-     * @expectedException \Neemzy\Environ\Exception\UndefinedEnvironmentException
-     * @return void
+     * @depends           testAdd
+     * @expectedException Neemzy\Environ\Exception\UndefinedEnvironmentException
      */
     public function testSetWithInvalidName($manager)
     {
         $manager->set('invalid');
     }
 
-
-
     /**
-     * Checks setting the current environment by a valid name
+     * @param Manager
+     *
+     * @return Manager
      *
      * @depends testAdd
-     * @param \Neemzy\Environ\Manager Manager instance
-     *
-     * @return \Neemzy\Environ\Manager Manager instance
      */
     public function testSetWithValidName($manager)
     {
@@ -60,30 +50,20 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         return $manager;
     }
 
-
-
     /**
-     * Checks getting the current environment's name
+     * @param Manager
      *
      * @depends testSetWithValidName
-     * @param \Neemzy\Environ\Manager Manager instance crafted in previous test
-     *
-     * @return void
      */
     public function testGet($manager)
     {
         $this->assertEquals('test', $manager->get());
     }
 
-
-
     /**
-     * Checks testing the current environment by name
+     * @param Manager
      *
      * @depends testSetWithValidName
-     * @param \Neemzy\Environ\Manager Manager instance crafted in previous test
-     *
-     * @return void
      */
     public function testIs($manager)
     {
@@ -91,13 +71,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($manager->is('something'));
     }
 
-
-
     /**
-     * Checks initializing the manager to auto-select the environment without an eligible one
-     *
-     * @expectedException \Neemzy\Environ\Exception\NoApplicableEnvironmentException
-     * @return void
+     * @expectedException Neemzy\Environ\Exception\NoApplicableEnvironmentException
      */
     public function testInitWithoutEligibleEnvironment()
     {
@@ -105,15 +80,10 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $manager->init();
     }
 
-
-
     /**
-     * Checks initializing the manager to auto-select the environment with an eligible one
+     * @param Manager
      *
      * @depends testSetWithValidName
-     * @param \Neemzy\Environ\Manager Manager instance crafted in previous test
-     *
-     * @return void
      */
     public function testInitWithEligibleEnvironment($manager)
     {

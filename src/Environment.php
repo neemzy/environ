@@ -4,25 +4,15 @@ namespace Neemzy\Environ;
 
 class Environment
 {
-    /**
-     * @var \Closure Condition closure
-     */
+    /** @var \Closure */
     protected $condition;
 
-    /**
-     * @var \Closure Callback closure
-     */
+    /** @var \Closure */
     protected $callback;
 
-
-
     /**
-     * Constructor
-     *
-     * @param \Closure $condition Condition closure
-     * @param \Closure $callback Callback closure
-     *
-     * @return void
+     * @param \Closure $condition
+     * @param \Closure $callback
      */
     public function __construct(\Closure $condition, \Closure $callback = null)
     {
@@ -30,25 +20,14 @@ class Environment
         $this->callback = $callback;
     }
 
-
-
     /**
-     * Checks if this instance's conditions are fulfilled
-     *
-     * @return bool Condition closure result
+     * @return bool
      */
     public function test()
     {
         return !!call_user_func($this->condition);
     }
 
-
-
-    /**
-     * Executes this instance's callback
-     *
-     * @return void
-     */
     public function run()
     {
         if (is_callable($this->callback)) {
