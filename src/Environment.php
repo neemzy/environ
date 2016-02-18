@@ -19,8 +19,8 @@ class Environment
     /**
      * Constructor
      *
-     * @param Closure $condition Condition closure
-     * @param Closure $callback Callback closure
+     * @param \Closure $condition Condition closure
+     * @param \Closure $callback Callback closure
      *
      * @return void
      */
