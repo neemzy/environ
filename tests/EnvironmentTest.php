@@ -55,4 +55,21 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
         $environment->run();
         $this->assertTrue($flag);
     }
+
+    /**
+     * Checks that not providing a callback does not trigger an error nor throw an exception
+     *
+     * @return void
+     */
+    public function testRunWithNoCallback()
+    {
+        $environment = new Environment(
+            function () {
+            }
+        );
+
+        $cogitoErgoSum = true;
+        $environment->run();
+        $this->assertTrue($cogitoErgoSum); // No error / exception has been raised at that point
+    }
 }

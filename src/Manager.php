@@ -8,9 +8,9 @@ use Neemzy\Environ\Exception\NoApplicableEnvironmentException;
 class Manager
 {
     /**
-     * @var array Environment collection
+     * @var \Neemzy\Environ\Environment[] collection
      */
-    protected $environments;
+    protected $environments = array();
 
     /**
      * @var string Current environment's name
@@ -36,9 +36,9 @@ class Manager
      * Adds an environment to this instance's collection
      *
      * @param string                     $name        Environment name
-     * @param Neemzy\Environ\Environment $environment Environment instance
+     * @param \Neemzy\Environ\Environment $environment Environment instance
      *
-     * @return Neemzy\Environ\Manager Self (for chaining)
+     * @return \Neemzy\Environ\Manager Self (for chaining)
      */
     public function add($name, Environment $environment)
     {
@@ -52,7 +52,7 @@ class Manager
     /**
      * Initializes environments
      *
-     * @throws Neemzy\Environ\Exception\NoApplicableEnvironmentException
+     * @throws \Neemzy\Environ\Exception\NoApplicableEnvironmentException
      * @return void
      */
     public function init()
@@ -102,7 +102,7 @@ class Manager
      *
      * @param string $name Environment name
      *
-     * @throws Neemzy\Environ\Exception\UndefinedEnvironmentException
+     * @throws \Neemzy\Environ\Exception\UndefinedEnvironmentException
      * @return void
      */
     public function set($name)

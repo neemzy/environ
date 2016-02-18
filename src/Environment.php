@@ -19,12 +19,12 @@ class Environment
     /**
      * Constructor
      *
-     * @param Closure $condition Condition closure
-     * @param Closure $callback Callback closure
+     * @param \Closure $condition Condition closure
+     * @param \Closure $callback Callback closure
      *
      * @return void
      */
-    public function __construct(\Closure $condition, \Closure $callback)
+    public function __construct(\Closure $condition, \Closure $callback = null)
     {
         $this->condition = $condition;
         $this->callback = $callback;
@@ -51,6 +51,8 @@ class Environment
      */
     public function run()
     {
-        call_user_func($this->callback);
+        if (is_callable($this->callback)) {
+            call_user_func($this->callback);
+        }
     }
 }
