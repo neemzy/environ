@@ -2,6 +2,7 @@
 
 namespace Neemzy\Environ\Tests;
 
+use Neemzy\Environ\Environment;
 use Neemzy\Environ\Manager;
 
 class ManagerTest extends \PHPUnit_Framework_TestCase
@@ -20,7 +21,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $environments = $reflection->getProperty('environments');
         $environments->setAccessible(true);
 
-        $this->assertSame($environment, $environments->getValue($manager)['test']);
+        $this->assertSame($environment, $environments->getValue($manager)['test'][0]);
 
         return $manager;
     }
@@ -29,11 +30,11 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
      * @param Manager
      *
      * @depends           testAdd
-     * @expectedException Neemzy\Environ\Exception\UndefinedEnvironmentException
+     * @expectedException \Neemzy\Environ\Exception\UndefinedEnvironmentException
      */
     public function testSetWithInvalidName($manager)
     {
-        $manager->set('invalid');
+        $manager->set('invalid', new Environment(function() { return true; }));
     }
 
     /**
@@ -45,7 +46,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetWithValidName($manager)
     {
-        $manager->set('test');
+        $manager->set('test', new Environment(function() { return true; }));
 
         return $manager;
     }
@@ -72,7 +73,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Neemzy\Environ\Exception\NoApplicableEnvironmentException
+     * @expectedException \Neemzy\Environ\Exception\NoApplicableEnvironmentException
      */
     public function testInitWithoutEligibleEnvironment()
     {
@@ -94,5 +95,32 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $manager->init();
 
         $this->assertEquals('new', $manager->get());
+    }
+
+    /**
+     * @throws \Neemzy\Environ\Exception\NoApplicableEnvironmentException
+     */
+    public function testEnvironmentDetectionMultiple() {
+        $manager = new Manager();
+        $manager->add('notThisOne', new Environment(function () {
+            return false;
+        }));
+        $manager->add('notThisOne', new Environment(function () {
+            return false;
+        }));
+        $manager->add('notThisOneEither', new Environment(function () {
+            return false;
+        }));
+        $manager->add('thisOne', new Environment(function () {
+            return false;
+        }));
+        $manager->add('thisOne', new Environment(function () {
+            return true;
+        }));
+        $manager->add('thisOne', new Environment(function () {
+            return false;
+        }));
+        $manager->init();
+        $this->assertEquals('thisOne', $manager->get());
     }
 }
