@@ -46,13 +46,26 @@ $environ
 
 You can chain declarations as above.
 
-### 3. ???
+You can also use multiple detection cases for a single key. 
+
+```php
+$environ->add('prod', new Environment(function () {
+    return php_sapi_name() == 'cli' && MY_PROJECT_DIR == '/var/www/myproject';
+}));
+$environ->add('prod', new Environment(function () {
+    return $_SERVER['HTTP_HOST'] == 'my.domain';
+}));
+$environ->init();
+```
+
+### 3. Trigger detection
 
 ```php
 $environ->init();
 ```
 
 This will browse the environments you declared above. The first one which condition closure returns a truthy value is then set up as the current environment, and its callback closure is triggered.
+
 
 ### 4. Profit !
 
